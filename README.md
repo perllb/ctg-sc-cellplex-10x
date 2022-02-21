@@ -5,9 +5,6 @@
 - Demux -> cellranger -> QC -> delivery
 - Supports CellPlex and RNA libraries sequenced on same flowcell.
 - CMO IDs used in `cellranger multi` must be specified in samplesheet. See `2. CMO specification` and `1. Samplesheet` sections below.
-- If antibody features are not in reference, a custom feature-ref csv can be created and specified with drivers -f tag.
-- Currently, BioLegend TotalSeq ADT A,B and C as well as TotalSeq HTO A are in references, located at `/projects/fs1/shared/references/cellranger_totalseq`.
-
 
 1. Edit your samplesheet to match the example samplesheet. See section `SampleSheet` below
 2. Edit the nextflow.config file to fit your project and system. 

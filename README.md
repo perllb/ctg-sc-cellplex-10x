@@ -5,6 +5,7 @@
 - Demux -> cellranger -> QC -> delivery
 - Supports CellPlex and RNA libraries sequenced on same flowcell.
 - CMO IDs used in `cellranger multi` must be specified in samplesheet. See `2. CMO specification` and `1. Samplesheet` sections below.
+- Handles delivery via lfs, and sends delivery email
 
 1. Edit your samplesheet to match the example samplesheet. See section `SampleSheet` below
 2. Edit the nextflow.config file to fit your project and system. 
@@ -109,6 +110,7 @@ CMO312,CMO312,R2,5P(BC),ACATGGTCAACGCTG,Multiplexing Capture
 
 Cellranger version: cellranger v6.0 
 
+* `delivery_info`: Generates the delivery info csv file needed to create delivery email (see deliverAuto below)
 * `parse samplesheets`: Parse samplesheet to fit cellranger mkfastq requirements.
 * `generate library csv`: Creates library.csv file based on input samplesheet. This file is used by the "count" step later
 * `Demultiplexing` (cellranger mkfastq): Converts raw basecalls to fastq, and demultiplex samples based on index (https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/6.0/using/multi#cellranger-mkfastq). 
@@ -117,6 +119,9 @@ Cellranger version: cellranger v6.0
 * `Cellranger count metrics` (bin/ctg-sc-cellplex-GEX-metrics-concat.py and ctg-sc-cellplex-Multiplex-metrics-concat.py): Collects main count metrics (#cells and #reads/cell etc.) from each sample and collect in table. One table for GEX metrics, and several tables for Multiplex metrics.
 * `multiQC`: Compile fastQC and cellranger multi metrics in multiqc report
 * `md5sum`: md5sum of all generated files
+* `deliverAuto`: executes delivery script in bin/ that edits template html delivery email, creates user, pass and executes mutt command to send email
+* `pipe_done`: marks pipeline as done (puts ctg.sc-cite-seq-10x.$projid.done in runfolder and logs)
+
 
 ## Container
 Currently using the sc-cite-seq-10x container. Contain cellranger v6.

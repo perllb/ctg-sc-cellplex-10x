@@ -28,7 +28,9 @@ The following files must be in the runfolder to start pipeline successfully.
 #### Example sheet
 ```
 [Header]
-metaid,CellPlex_dev_211005_run220221,
+metaid,2022_222
+email,per.a@med.lu.se
+autodeliver,y
 [Data]
 Lane,Sample_ID,index,Sample_Project,Sample_Species,Sample_Lib,Sample_Pair,Sample,CMO
 ,CellPlex1,SI-TT-B4,2021_test_Julia_Cellplex_run220221_test,human,gex,1,CellP1,CMO301|CMO302
@@ -69,6 +71,8 @@ Optional entries. They can be skipped, but recommended to use:
 ```
 [Header]
 metaid,CellPlex_dev_211005_run220221,
+autodeliver,y
+email,per.a@med.lu.se
 [Data]
 Lane,Sample_ID,index,Sample_Project,Sample_Species,Sample_Lib,Sample_Pair,Sample,CMO
 ,CellPlex1,SI-TT-B4,2021_test_Julia_Cellplex_run220221_test,human,gex,1,CellP1,CMO301|CMO302

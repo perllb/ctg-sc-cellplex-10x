@@ -48,11 +48,11 @@ Optional entries. They can be skipped, but recommended to use:
 
 #### [Data] section
 
- | Lane | Sample_ID | index | Sample_Species | Sample_Project | Sample_Lib | Sample_Pair | Sample | CMO |
- | --- | --- | --- | --- | --- | --- | --- | --- | --- | 
- | | Sr1 | SI-GA-D9 | human | 2022_022 | gex | 1 | S1 | CMO301\|CMO302 |
- | | Sr1_CP | SI-GA-H9 | human | 2022_022 | cp | 1 | S1 | |
- | | Sr2 | SI-GA-C9 | human | 2022_022 | gex | 2 | S2 | CMO303\|CMO304 |
+ | Lane | Sample_ID | index | Sample_Species | Sample_Project | Sample_Lib | Sample_Pair | Sample | CMO | cmotype |
+ | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | 
+ | | Sr1 | SI-GA-D9 | human | 2022_022 | gex | 1 | S1 | CMO301\|CMO302 | multi |
+ | | Sr1_CP | SI-GA-H9 | human | 2022_022 | cp | 1 | S1 | | |
+ | | Sr2 | SI-GA-C9 | human | 2022_022 | gex | 2 | S2 | CMO303\|CMO304 | single |
  | | Sr2_CP | SI-GA-C9 | human | 2022_022 | gex | 2 | S2 | |
 
 - The nf-pipeline takes the following Columns from samplesheet to use in channels:
@@ -65,6 +65,44 @@ Optional entries. They can be skipped, but recommended to use:
 - `Sample_Pair` : To match the GEX sample with the corresponding CP sample. e.g. in the example above, sample 'Sr1' is the GEX library, that should be matched with 'Sr1_CP' which is the CP library of the sample.
 - `Sample` : A common name for GEX+CellPlex sample. Must be the same for the corresponing GEX and Cellplex samples (such as in example above). So all samples with "Sample_Pair" = 1, must have same "Sample" etc.
 - `CMO` : CMO IDs used for the given sample. NOTE: This is specified in the `GEX` sample only in the sheet. MUST be specified for the GEX, otherwise it will crash. Leave the CP sample empty here.
+- `cmotype` : `multi` or `single`. 
+  - `multi`: If there are multiple CMOs pr sample. The same biological sample were split and a CMO was added to each new vial, and then pooled to one "sample_ID" in samplesheet. This would cause the CMO-"declaration" to be 
+  ```
+  [samples]
+  sample_id,cmo_ids
+  sample1,CMO301|CMO302
+  sample2,CMO303|CMO304
+  ```
+  - `single`: Each CMO represent one sample. Typically, different samples were treated with different CMOs, and then pooled. So one declaration will be:
+  ```
+  [samples]
+  sample_id,cmo_ids
+  sample1,CMO301
+  sample2,CMO302
+  sample3,CMO303
+  sample4,CMO304
+  ```
+ Note that for cmotype=`single`, the pipeline will generate the following nomenclature on this "CMO-declaration" in the library.csv file:
+```
+[samples]
+  sample_id,cmo_ids
+  ${sid}-301,CMO301
+```
+
+In the samplesheet template **below** it will generate these two csv:
+- For CellPlex1: Take the `Sample` column: `CellP1`, and it is cmotype=multi:
+ ```
+  [samples]
+  sample_id,cmo_ids
+  CellP1,CMO301|CMO302
+  ```
+- For CellPlex3: Take the `Sample` column: `CellP3`, and it is cmotype=single: (one CMO pr sample)
+ ```
+  [samples]
+  sample_id,cmo_ids
+  CellP3-303,CMO303
+  CellP3-304,CMO304
+  ```
 
 ### Samplesheet template
 
@@ -75,10 +113,10 @@ metaid,CellPlex_dev_211005_run220221,
 autodeliver,y
 email,per.a@med.lu.se
 [Data]
-Lane,Sample_ID,index,Sample_Project,Sample_Species,Sample_Lib,Sample_Pair,Sample,CMO
-,CellPlex1,SI-TT-B4,2021_test_Julia_Cellplex_run220221_test,human,gex,1,CellP1,CMO301|CMO302
-,CellPlex1_CP,SI-NN-A1,2021_test_Julia_Cellplex_run220221_test,human,cp,1,CellP1
-,CellPlex3,SI-TT-B6,2021_test_Julia_Cellplex_run220221_test,human,gex,3,CellP3,CMO303|CMO304
+Lane,Sample_ID,index,Sample_Project,Sample_Species,Sample_Lib,Sample_Pair,Sample,CMO,cmotype
+,CellPlex1,SI-TT-B4,2021_test_Julia_Cellplex_run220221_test,human,gex,1,CellP1,CMO301|CMO302,multi
+,CellPlex1_CP,SI-NN-A1,2021_test_Julia_Cellplex_run220221_test,human,cp,1,CellP1,
+,CellPlex3,SI-TT-B6,2021_test_Julia_Cellplex_run220221_test,human,gex,3,CellP3,CMO303|CMO304,single
 ,CellPlex3_CP,SI-NN-D1,2021_test_Julia_Cellplex_run220221_test,human,cp,3,CellP3
 ```
 

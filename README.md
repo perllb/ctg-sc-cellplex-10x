@@ -42,7 +42,6 @@ Lane,Sample_ID,index,Sample_Project,Sample_Species,Sample_Lib,Sample_Pair,Sample
 #### [Header] section
 Optional entries. They can be skipped, but recommended to use:
 - `metaid` : optional. set to create working folders with this name. otherwise, it will be created based on runfolder name/date.
-##### NOT YET SUPPORTED:
 - `email` : Email to customer (or ctg staff) that should retrieve email with qc and deliver info upon completion of pipeline. Note: only lu emails works (e.g. @med.lu.se or @lth.se.
 - `autodeliver` : set to `y` if email should be sent automatically upon completion. Otherwise, set to `n`.
 
